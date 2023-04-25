@@ -168,7 +168,7 @@ def is_valid():
 # Adding a new transaction to the Blockchain
 @app.route('/add_transactions', methods = ['POST'])
 def add_transactions():
-    json = request.get_json()
+    json = request.get_json(force=True, silent=True, cache=False)
     transaction_keys = ['sendor', 'recevier', 'amount']
     if not all (key in json for key in transaction_keys):
         return 'Some elements of the transaction are missing', 400
@@ -181,10 +181,10 @@ def add_transactions():
 # Connecting new nodes
 @app.route('/connect_node', methods = ['POST'])
 def connect_node():
-    json = request.get_json()
+    json = request.get_json(force=True, silent=True, cache=False)
     nodes = json.get('nodes')
     if nodes is None:
-        return 'No Node', 400
+        return "No Node", 400
     for node in nodes:
         blockchain.add_node(node)
     response = {'message': 'All the nodes are now connected.',
